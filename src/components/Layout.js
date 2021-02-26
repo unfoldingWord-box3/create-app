@@ -8,7 +8,7 @@ import { ReferenceContext } from '@context/ReferenceContext'
 
 export default function Layout({
   children,
-  title = 'translationCore: Create',
+  title = 'translationCore: Admin',
 }) {
   const {
     state: authentication,
@@ -16,12 +16,13 @@ export default function Layout({
   } = useContext(AuthenticationContext)
 
   const {
-    state: { showAccountSetup },
+    state: { owner, languageId, showAccountSetup },
   } = useContext(ReferenceContext)
 
+  const _title = `${title} (${owner}/${languageId})`
   return (
     <div className='h-screen w-screen flex flex-col'>
-      <Header title={title} authentication={authentication || {}} />
+      <Header title={_title} authentication={authentication || {}} />
       <main className='flex flex-1 flex-col w-auto m-0 bg-gray-200'>
         {authentication && !showAccountSetup ? (
           children

@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import { Button, Typography } from '@material-ui/core'
 import * as isEqual from 'deep-equal'
 import { Workspace } from 'resource-workspace-rcl'
 import { makeStyles } from '@material-ui/core/styles'
@@ -20,6 +21,14 @@ import { ReferenceContext } from '@context/ReferenceContext'
 import { NT_BOOKS } from '@common/BooksOfTheBible'
 import useLocalStorage from '@hooks/useLocalStorage'
 import { getLanguage } from '@common/languages'
+import {
+  Card,
+  CardContent,
+  useContent,
+  useCardState,
+} from 'translation-helps-rcl'
+import RepoCard from '@components/RepoCard'
+import * as res from '@common/resourceTypes.js'
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -36,26 +45,15 @@ const useStyles = makeStyles(() => ({
 
 function WorkspaceContainer() {
   const classes = useStyles()
-  const [selections, setSelections] = useState([])
   const {
     state: {
       owner,
       server,
       branch,
-      taArticle,
       languageId,
-      selectedQuote,
-      scriptureOwner,
-      bibleReference: {
-        bookId, chapter, verse,
-      },
-      supportedBibles,
       currentLayout,
     },
     actions: {
-      setQuote,
-      updateTaDetails,
-      setSupportedBibles,
       setCurrentLayout,
     },
   } = useContext(ReferenceContext)
@@ -73,208 +71,53 @@ function WorkspaceContainer() {
     layout.absolute = currentLayout
   }
 
-  function isNT(bookId) {
-    return NT_BOOKS.includes(bookId)
-  }
-
-  const commonScriptureCardConfigs = {
-    isNT,
-    server,
-    branch,
-    classes,
-    getLanguage,
-    useLocalStorage,
-    originalLanguageOwner: scriptureOwner,
-  }
-
-  getResourceBibles({
-    bookId,
-    chapter,
-    verse,
-    resourceId: languageId === 'en' ? 'ult' : 'glt',
-    owner,
-    languageId,
-    branch,
-    server,
-  }).then(bibles => {
-    if (bibles?.length) {
-      if (!isEqual(bibles, supportedBibles )) {
-        console.log(`found ${bibles?.length} bibles`)
-        setSupportedBibles(bibles) //TODO blm: update bible refs
-      }
-    } else {
-      console.log(`no bibles`)
-    }
-  })
-
-  const originalScripture = {
-    reference: {
-      projectId: bookId,
-      chapter,
-      verse,
-    },
-    isNT: () => isNT(bookId),
-    resource: {
-      owner: 'unfoldingWord',
-      originalLanguageOwner: 'unfoldingWord',
-      languageId: isNT(bookId) ? NT_ORIG_LANG : OT_ORIG_LANG,
-      resourceId: ORIGINAL_SOURCE,
-    },
-    getLanguage: () => ({ direction: isNT(bookId) ? 'ltr' : 'rtl' }),
-  }
-
   const config = {
     server,
     branch,
     cache: { maxAge: 1 * 1 * 1 * 60 * 1000 },
   }
 
-  const originalScriptureConfig = useScripture({
-    ...originalScripture,
-    resource: {
-      ...originalScripture.resource,
-      resourceId: isNT(bookId) ? NT_ORIG_LANG_BIBLE : OT_ORIG_LANG_BIBLE,
-      projectId: isNT(bookId) ? NT_ORIG_LANG_BIBLE : OT_ORIG_LANG_BIBLE,
-    },
-    config,
-  })
+  const adminContext = 'Org='+owner+", LanguageId=" + languageId;
+  console.log("res.scriptureResourceTypes:", res.scriptureResourceTypes)
+  console.log("res.scriptureResourceTypeIds:", res.scriptureResourceTypeIds)
+  res.scriptureResourceTypeIds.map( t => console.log("t,value", t, res.scriptureResourceTypes[t]))
 
   return (
-    <SelectionsContextProvider
-      selections={selections}
-      onSelections={setSelections}
-      quote={selectedQuote?.quote}
-      occurrence={selectedQuote?.occurrence}
-      verseObjects={originalScriptureConfig.verseObjects || []}
+    <Workspace
+      rowHeight={25}
+      layout={layout}
+      classes={classes}
+      gridMargin={[15, 15]}
+      onLayoutChange={setCurrentLayout}
     >
-      <Workspace
-        rowHeight={25}
-        layout={layout}
-        classes={classes}
-        gridMargin={[15, 15]}
-        onLayoutChange={setCurrentLayout}
+
+      <Card
+        title={'Bingo'}
       >
-        <ScriptureCard
-          cardNum={0}
-          title='Scripture'
-          reference={{
-            chapter,
-            verse,
-            bookId,
-            projectId: bookId,
-          }}
-          resource={{
-            owner,
-            languageId,
-            resourceId: TARGET_LITERAL,
-            originalLanguageOwner: scriptureOwner,
-          }}
-          disableWordPopover={true}
-          {...commonScriptureCardConfigs}
-        />
+        <CardContent markdown={adminContext} >
+          <Button>Click Me</Button>
+        </CardContent>
+      </Card>
 
-        <ScriptureCard
-          cardNum={1}
-          title='Scripture'
-          reference={{
-            chapter,
-            verse,
-            bookId,
-            projectId: bookId,
-          }}
-          resource={{
-            owner,
-            languageId,
-            resourceId: ORIGINAL_SOURCE,
-            originalLanguageOwner: scriptureOwner,
-          }}
-          {...commonScriptureCardConfigs}
-        />
-
-        <ScriptureCard
-          cardNum={2}
-          title='Scripture'
-          reference={{
-            chapter,
-            verse,
-            bookId,
-            projectId: bookId,
-          }}
-          resource={{
-            owner,
-            languageId,
-            resourceId: TARGET_SIMPLIFIED,
-            originalLanguageOwner: scriptureOwner,
-          }}
-          disableWordPopover={true}
-          {...commonScriptureCardConfigs}
-        />
-
-        <ResourceCard
-          title='translationNotes'
-          classes={classes}
-          chapter={chapter}
-          verse={verse}
-          server={server}
-          owner={owner}
-          branch={branch}
-          filePath={null}
-          resourceId={'tn'}
-          projectId={bookId}
-          languageId={languageId}
-          setQuote={setQuote}
-          selectedQuote={selectedQuote}
-          updateTaDetails={updateTaDetails}
-        />
-        <ResourceCard
-          title='translationAcademy'
-          classes={classes}
-          chapter={chapter}
-          verse={verse}
-          server={server}
-          owner={owner}
-          branch={branch}
-          languageId={languageId}
-          resourceId={'ta'}
-          projectId={taArticle?.projectId}
-          filePath={taArticle?.filePath}
-        />
-        <ResourceCard
-          title='translationWords'
-          classes={classes}
-          chapter={chapter}
-          verse={verse}
-          server={server}
-          owner={owner}
-          branch={branch}
-          viewMode={'list'}
-          languageId={languageId}
-          resourceId={'twl'}
-          projectId={bookId}
-          filePath={null}
-          setQuote={setQuote}
-          selectedQuote={selectedQuote}
-          disableFilters
-          disableNavigation
-          hideMarkdownToggle
-        />
-        <ResourceCard
-          title='translationQuestions'
-          classes={classes}
-          chapter={chapter}
-          verse={verse}
-          server={server}
-          owner={owner}
-          branch={branch}
-          languageId={languageId}
-          resourceId={'tq'}
-          projectId={bookId}
-          filePath={null}
-          viewMode='question'
-        />
-      </Workspace>
-    </SelectionsContextProvider>
+      <RepoCard title={adminContext} />
+      <RepoCard title={res.scriptureResourceTypes["glt"]} />
+      {res.scriptureResourceTypeIds.map(key => <Typography>{key}</Typography> )}
+    </Workspace>
   )
 }
 
 export default WorkspaceContainer
+
+/*
+      {
+        res.scriptureResourceTypeIds.map(r => 
+          <RepoCard title={res.scriptureResourceTypes["{r}"]} />
+      )}                
+
+      {
+        res.scriptureResourceTypeIds.map(r => 
+          <RepoCard title={'xx'} />
+      )}                
+
+
+*/

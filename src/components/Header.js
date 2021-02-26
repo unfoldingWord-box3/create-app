@@ -80,26 +80,6 @@ export default function Header({ title, authentication: { user } }) {
               {title}
             </Typography>
           </div>
-          <div className={classes.navigation}>
-            <BibleReference />
-          </div>
-          <div className='flex flex-1 justify-end'>
-            {/* <Button
-              className={classes.button}
-              variant='outlined'
-              onClick={() => {}}
-            >
-              <LinkIcon classes={{ root: classes.icon }} htmlColor='#ffffff' />
-            </Button>
-            <Button
-              className={classes.button}
-              variant='outlined'
-              onClick={() => {}}
-            >
-              <ShareIcon classes={{ root: classes.icon }} htmlColor='#ffffff' />
-            </Button>
-            <SubmitButton variant='contained' disableElevation active={false} /> */}
-          </div>
         </Toolbar>
       </AppBar>
       <Drawer
