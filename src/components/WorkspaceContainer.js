@@ -111,7 +111,7 @@ export default WorkspaceContainer
 /*
       {
         res.scriptureResourceTypeIds.map(r => 
-          <RepoCard title={res.scriptureResourceTypes["{r}"]} />
+          <RepoCard title={res.scriptureResourceTypes[r]} />
       )}                
 
       {
