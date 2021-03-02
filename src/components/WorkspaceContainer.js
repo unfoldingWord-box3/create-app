@@ -1,33 +1,8 @@
 import { useContext, useState } from 'react'
-import { Button, Typography } from '@material-ui/core'
-import * as isEqual from 'deep-equal'
-import { Workspace } from 'resource-workspace-rcl'
+import { Container } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { SelectionsContextProvider } from 'scripture-resources-rcl'
-import {
-  OT_ORIG_LANG,
-  NT_ORIG_LANG,
-  useScripture,
-  ScriptureCard,
-  TARGET_LITERAL,
-  ORIGINAL_SOURCE,
-  TARGET_SIMPLIFIED,
-  NT_ORIG_LANG_BIBLE,
-  OT_ORIG_LANG_BIBLE,
-} from 'single-scripture-rcl'
-import ResourceCard from '@components/ResourceCard'
-import { getResourceBibles } from '@utils/resources'
 import { ReferenceContext } from '@context/ReferenceContext'
-import { NT_BOOKS } from '@common/BooksOfTheBible'
-import useLocalStorage from '@hooks/useLocalStorage'
-import { getLanguage } from '@common/languages'
-import {
-  Card,
-  CardContent,
-  useContent,
-  useCardState,
-} from 'translation-helps-rcl'
-import RepoCard from '@components/RepoCard'
+import RepoHealthCheck from '@components/RepoHealthCheck'
 import * as res from '@common/resourceTypes.js'
 
 const useStyles = makeStyles(() => ({
@@ -51,25 +26,9 @@ function WorkspaceContainer() {
       server,
       branch,
       languageId,
-      currentLayout,
-    },
-    actions: {
-      setCurrentLayout,
     },
   } = useContext(ReferenceContext)
 
-  const layout = {
-    widths: [
-      [1, 1, 1],
-      [2, 2],
-      [2, 2],
-    ],
-    heights: [[5], [10, 10], [10, 10]],
-  }
-
-  if (currentLayout) {
-    layout.absolute = currentLayout
-  }
 
   const config = {
     server,
@@ -77,47 +36,46 @@ function WorkspaceContainer() {
     cache: { maxAge: 1 * 1 * 1 * 60 * 1000 },
   }
 
-  const adminContext = 'Org='+owner+", LanguageId=" + languageId;
-  console.log("res.scriptureResourceTypes:", res.scriptureResourceTypes)
-  console.log("res.scriptureResourceTypeIds:", res.scriptureResourceTypeIds)
-  res.scriptureResourceTypeIds.map( t => console.log("t,value", t, res.scriptureResourceTypes[t]))
-
   return (
-    <Workspace
-      rowHeight={25}
-      layout={layout}
-      classes={classes}
-      gridMargin={[15, 15]}
-      onLayoutChange={setCurrentLayout}
-    >
+    <Container maxWidth="sm">
 
-      <Card
-        title={'Bingo'}
-      >
-        <CardContent markdown={adminContext} >
-          <Button>Click Me</Button>
-        </CardContent>
-      </Card>
+      <RepoHealthCheck title={res.scriptureResourceTypes["tn"]}  server={server} branch={branch} owner={owner} languageId={languageId} resourceId="tn" />
+      <RepoHealthCheck title={res.scriptureResourceTypes["ta"]}  server={server} branch={branch} owner={owner} languageId={languageId} resourceId="ta" />
+      <RepoHealthCheck title={res.scriptureResourceTypes["tw"]}  server={server} branch={branch} owner={owner} languageId={languageId} resourceId="tw" />
+      <RepoHealthCheck title={res.scriptureResourceTypes["twl"]} server={server} branch={branch} owner={owner} languageId={languageId} resourceId="twl" />
+      <RepoHealthCheck title={res.scriptureResourceTypes["tq"]}  server={server} branch={branch} owner={owner} languageId={languageId} resourceId="tq" />
+      <RepoHealthCheck title={res.scriptureResourceTypes["sn"]}  server={server} branch={branch} owner={owner} languageId={languageId} resourceId="sn" />
+      <RepoHealthCheck title={res.scriptureResourceTypes["sq"]}  server={server} branch={branch} owner={owner} languageId={languageId} resourceId="sq" />
+      <RepoHealthCheck title={res.scriptureResourceTypes["glt"]} server={server} branch={branch} owner={owner} languageId={languageId} resourceId="glt" />
+      <RepoHealthCheck title={res.scriptureResourceTypes["gst"]} server={server} branch={branch} owner={owner} languageId={languageId} resourceId="gst" />
 
-      <RepoCard title={adminContext} />
-      <RepoCard title={res.scriptureResourceTypes["glt"]} />
-      {res.scriptureResourceTypeIds.map(key => <Typography>{key}</Typography> )}
-    </Workspace>
+    </Container>
   )
 }
 
 export default WorkspaceContainer
 
 /*
-      {
-        res.scriptureResourceTypeIds.map(r => 
-          <RepoCard title={res.scriptureResourceTypes[r]} />
-      )}                
+      <RepoHealthCheck title={res.scriptureResourceTypes["tn"]}  owner={owner} languageId={languageId} resourceId="tn" />
+      <RepoHealthCheck title={res.scriptureResourceTypes["ta"]}  owner={owner} languageId={languageId} resourceId="ta" />
+      <RepoHealthCheck title={res.scriptureResourceTypes["tw"]}  owner={owner} languageId={languageId} resourceId="tw" />
+      <RepoHealthCheck title={res.scriptureResourceTypes["twl"]} owner={owner} languageId={languageId} resourceId="twl" />
+      <RepoHealthCheck title={res.scriptureResourceTypes["tq"]}  owner={owner} languageId={languageId} resourceId="tq" />
+      <RepoHealthCheck title={res.scriptureResourceTypes["sn"]}  owner={owner} languageId={languageId} resourceId="sn" />
+      <RepoHealthCheck title={res.scriptureResourceTypes["sq"]}  owner={owner} languageId={languageId} resourceId="sq" />
+      <RepoHealthCheck title={res.scriptureResourceTypes["glt"]} owner={owner} languageId={languageId} resourceId="glt" />
+      <RepoHealthCheck title={res.scriptureResourceTypes["gst"]} owner={owner} languageId={languageId} resourceId="gst" />
 
-      {
-        res.scriptureResourceTypeIds.map(r => 
-          <RepoCard title={'xx'} />
-      )}                
 
+            {
+        res.scriptureResourceTypeIds.map( (rid) => {
+          <RepoHealthCheck 
+            title={res.scriptureResourceTypes[{rid}]}
+            owner={owner}
+            languageId={languageId}
+            resourceId={rid}
+          />
+        })
+      }
 
 */

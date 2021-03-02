@@ -19,10 +19,9 @@ export default function Layout({
     state: { owner, languageId, showAccountSetup },
   } = useContext(ReferenceContext)
 
-  const _title = `${title} (${owner}/${languageId})`
   return (
     <div className='h-screen w-screen flex flex-col'>
-      <Header title={_title} authentication={authentication || {}} />
+      <Header title={title} authentication={authentication || {}} />
       <main className='flex flex-1 flex-col w-auto m-0 bg-gray-200'>
         {authentication && !showAccountSetup ? (
           children

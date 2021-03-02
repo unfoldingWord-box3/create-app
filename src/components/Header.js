@@ -8,7 +8,6 @@ import Toolbar from '@material-ui/core/Toolbar'
 import MenuIcon from '@material-ui/icons/Menu'
 import AppBar from '@material-ui/core/AppBar'
 import Drawer from '@components/Drawer'
-import BibleReference from '@components/BibleReference'
 import { AuthContext } from '@context/AuthContext'
 // TODO: Enable buttons once ready to fully implement functionality
 // import LinkIcon from '@material-ui/icons/Link'
