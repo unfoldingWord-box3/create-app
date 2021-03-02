@@ -1,6 +1,10 @@
-//import { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import {Button, Paper, Typography} from '@material-ui/core'
+import {useState, useEffect} from 'react'
+import {Paper, Typography, Button} from '@material-ui/core'
+
+import ReactJson from 'react-json-view'
+import CreateRepoButton from './CreateRepoButton'
+import * as dcsApis from '../utils/dcsApis'
 
 export default function RepoHealthCheck({
   title,
@@ -11,6 +15,29 @@ export default function RepoHealthCheck({
   resourceId,
 }) 
 {
+  const [repoCheck, setRepoCheck] = useState(null);
+
+  useEffect(() => {
+    if ( owner.toLowerCase() === 'unfoldingword') {
+      if ( resourceId === 'glt' ) resourceId = 'ult';
+      if ( resourceId === 'gst' ) resourceId = 'ust';
+    }
+  
+    const rid = languageId + '_' + resourceId.toLowerCase();
+    let errors = [];
+    
+    async function doRepoCheck() {
+      dcsApis.verifyRepo(owner,rid,errors,resourceId,languageId)
+      .then((errors) => {
+          setRepoCheck(errors);
+      });
+    }
+
+    doRepoCheck()
+
+  }, [owner, languageId, resourceId])
+
+
 
   return (
     <Paper>
@@ -19,7 +46,12 @@ export default function RepoHealthCheck({
       <Typography variant="body2">LangId is {languageId}</Typography>
       <Typography variant="body2">server is {server}</Typography>
       <Typography variant="body2">branch is {branch}</Typography>
-      <Button >{resourceId}</Button>
+      <Typography variant="body2">resourceId is {resourceId}</Typography>
+      <ReactJson src={repoCheck} />
+      {
+        repoCheck && !repoCheck[0].repoFound && 
+            <CreateRepoButton />
+      }
     </Paper>
   )
 }
