@@ -5,6 +5,7 @@ import {Paper, Typography, Button} from '@material-ui/core'
 import ReactJson from 'react-json-view'
 import CreateRepoButton from './CreateRepoButton'
 import * as dcsApis from '../utils/dcsApis'
+import RenameRepoButton from './RenameRepoButton'
 
 export default function RepoHealthCheck({
   title,
@@ -35,7 +36,7 @@ export default function RepoHealthCheck({
 
     doRepoCheck()
 
-  }, [owner, languageId, resourceId])
+  }, [setRepoCheck, owner, languageId, resourceId])
 
 
 
@@ -50,7 +51,10 @@ export default function RepoHealthCheck({
       <ReactJson src={repoCheck} />
       {
         repoCheck && !repoCheck[0].repoFound && 
-            <CreateRepoButton />
+        <div>
+          <CreateRepoButton active={true} owner={owner} languageId={languageId} resourceId={resourceId} />
+          <RenameRepoButton />
+        </div>
       }
     </Paper>
   )
@@ -64,3 +68,15 @@ RepoHealthCheck.propTypes = {
   resourceId: PropTypes.string.isRequired,
 }
 
+/*
+
+      {
+        repoCheck && !repoCheck[0].repoFound && 
+          <div>
+            <CreateRepoButton />
+            <RenameRepoButton />
+          </div>
+      }
+
+            <CreateRepoButton owner={owner} languageId={languageId} resourceId={resourceId} active={true} />
+*/
