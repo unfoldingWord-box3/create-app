@@ -43,11 +43,12 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-function RenameRepoButton({ active, ...rest }) {
+function RenameRepoButton({ active, owner, languageId, resourceId }) {
     const [repoRename, setRepoRename] = useState('');
     const [submitRename, setSubmitRename] = useState(false)
     const [showSuccess, setShowSuccess] = useState(false)
     const [showError, setShowError] = useState(false)
+    const [errorMessage, setErrorMessage] = useState('')
   
     const classes = useStyles({ active })
 
@@ -57,19 +58,29 @@ function RenameRepoButton({ active, ...rest }) {
 
     async function onSubmitRename() {
         setSubmitRename(true)
+
+        const rid = languageId + '_' + resourceId.toLowerCase();
+
+        let url = 'https://qa.door43.org/api/v1/repos/';
+        url += owner + '/';
+        url += repoRename;
+        url += '?token=3a4b5caa338668855316a11f5356832b69bfb554';
+
     
-        const res = await fetch('/api/xxxfeedback', {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-        })
-    
-        if (res.status === 200) {
-          console.log('res.status', res.status)
-          setShowSuccess(true)
-        } else {
-          setShowError(true)
-        }
-    
+        const res = await fetch(url, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: `{ "name": "${rid}" }`
+          })
+      
+          if (res.status === 200) {
+            setShowSuccess(true)
+          } else {
+              console.log('response:', res)
+              setErrorMessage('Error: '+res.status+' ('+res.statusText+')')
+              setShowError(true)
+          }
+  
         setSubmitRename(false)
     }
     
@@ -105,7 +116,7 @@ function RenameRepoButton({ active, ...rest }) {
                     message={
                     showSuccess
                         ? `Repo renamed!`
-                        : `Something went wrong`
+                        : errorMessage
                     }
                 />
                 ) : null}

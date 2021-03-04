@@ -53,7 +53,7 @@ export default function RepoHealthCheck({
         repoCheck && !repoCheck[0].repoFound && 
         <div>
           <CreateRepoButton active={true} owner={owner} languageId={languageId} resourceId={resourceId} />
-          <RenameRepoButton />
+          <RenameRepoButton active={true} owner={owner} languageId={languageId} resourceId={resourceId} />
         </div>
       }
     </Paper>

@@ -55,22 +55,22 @@ function CreateRepoButton({active, owner, languageId, resourceId }) {
         
         async function doSubmitCreate() {
         
-            const res = await fetch('https://qa.door43.org/api/v1/user/repos', {
+            const res = await fetch('https://qa.door43.org/api/v1/orgs/translate_test/repos?token=3a4b5caa338668855316a11f5356832b69bfb554', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: {
+              body: `{
                 "auto_init": true,
                 "default_branch": "master",
                 "description": "Init New Repo by Admin App",
                 "gitignores": "macOS",
                 "issue_labels": "",
                 "license": "CC-BY-SA-4.0.md",
-                "name": rid,
+                "name": "${rid}",
                 "private": false,
                 "readme": "",
                 "template": true,
                 "trust_model": "default"
-              }
+              }`
             })
         
             if (res.status === 201) {
