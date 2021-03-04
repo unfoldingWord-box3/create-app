@@ -41,6 +41,7 @@ function CreateRepoButton({active, owner, languageId, resourceId }) {
     const [submitCreate, setSubmitCreate] = useState(false)
     const [showSuccess, setShowSuccess] = useState(false)
     const [showError, setShowError] = useState(false)
+    const [errorMessage, setErrorMessage] = useState('')
    
     useEffect(() => {
         if ( !submitCreate ) return;
@@ -72,11 +73,12 @@ function CreateRepoButton({active, owner, languageId, resourceId }) {
               }
             })
         
-            if (res.status === 200) {
-              console.log('res.status', res.status)
+            if (res.status === 201) {
               setShowSuccess(true)
             } else {
-              setShowError(true)
+                console.log('response:', res)
+                setErrorMessage('Error: '+res.status+' ('+res.statusText+')')
+                setShowError(true)
             }
         
         }
@@ -90,7 +92,7 @@ function CreateRepoButton({active, owner, languageId, resourceId }) {
     const classes = useStyles({ active })
     return (
         <div>
-            <Button className={classes.root} >
+            <Button className={classes.root} onClick={() => setSubmitCreate(true)} >
                 Create Repo
             </Button>
             {showSuccess || showError ? (
@@ -99,7 +101,7 @@ function CreateRepoButton({active, owner, languageId, resourceId }) {
                     message={
                     showSuccess
                         ? `Repo Created!`
-                        : `Something went wrong`
+                        : errorMessage
                     }
                 />
             ) : null}
@@ -108,8 +110,3 @@ function CreateRepoButton({active, owner, languageId, resourceId }) {
 }
 
 export default CreateRepoButton
-
-
-/*
-onClick={setSubmitCreate(true)} 
-*/
