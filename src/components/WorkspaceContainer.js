@@ -49,33 +49,13 @@ function WorkspaceContainer() {
       <RepoHealthCheck title={res.scriptureResourceTypes["glt"]} server={server} branch={branch} owner={owner} languageId={languageId} resourceId="glt" />
       <RepoHealthCheck title={res.scriptureResourceTypes["gst"]} server={server} branch={branch} owner={owner} languageId={languageId} resourceId="gst" />
 
+      <RepoHealthCheck title={res.obsResourceTypes["obs"]} server={server} branch={branch} owner={owner} languageId={languageId} resourceId="obs" />
+      <RepoHealthCheck title={res.obsResourceTypes["obs_tq"]} server={server} branch={branch} owner={owner} languageId={languageId} resourceId="obs_tq" />
+      <RepoHealthCheck title={res.obsResourceTypes["obs_sn"]} server={server} branch={branch} owner={owner} languageId={languageId} resourceId="obs_sn" />
+      <RepoHealthCheck title={res.obsResourceTypes["obs_sq"]} server={server} branch={branch} owner={owner} languageId={languageId} resourceId="obs_sq" />
+
     </Container>
   )
 }
 
 export default WorkspaceContainer
-
-/*
-      <RepoHealthCheck title={res.scriptureResourceTypes["tn"]}  owner={owner} languageId={languageId} resourceId="tn" />
-      <RepoHealthCheck title={res.scriptureResourceTypes["ta"]}  owner={owner} languageId={languageId} resourceId="ta" />
-      <RepoHealthCheck title={res.scriptureResourceTypes["tw"]}  owner={owner} languageId={languageId} resourceId="tw" />
-      <RepoHealthCheck title={res.scriptureResourceTypes["twl"]} owner={owner} languageId={languageId} resourceId="twl" />
-      <RepoHealthCheck title={res.scriptureResourceTypes["tq"]}  owner={owner} languageId={languageId} resourceId="tq" />
-      <RepoHealthCheck title={res.scriptureResourceTypes["sn"]}  owner={owner} languageId={languageId} resourceId="sn" />
-      <RepoHealthCheck title={res.scriptureResourceTypes["sq"]}  owner={owner} languageId={languageId} resourceId="sq" />
-      <RepoHealthCheck title={res.scriptureResourceTypes["glt"]} owner={owner} languageId={languageId} resourceId="glt" />
-      <RepoHealthCheck title={res.scriptureResourceTypes["gst"]} owner={owner} languageId={languageId} resourceId="gst" />
-
-
-            {
-        res.scriptureResourceTypeIds.map( (rid) => {
-          <RepoHealthCheck 
-            title={res.scriptureResourceTypes[{rid}]}
-            owner={owner}
-            languageId={languageId}
-            resourceId={rid}
-          />
-        })
-      }
-
-*/

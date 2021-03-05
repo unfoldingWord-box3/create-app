@@ -5,7 +5,7 @@ import { setup } from 'axios-cache-adapter';
 import JSZip from 'jszip';
 import _ from "lodash";
 
-const baseURL = 'https://git.door43.org/';
+const baseURL = 'https://qa.door43.org/';
 const apiPath = 'api/v1';
 
 const repoDefaultMap = {

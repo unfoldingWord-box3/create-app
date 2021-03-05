@@ -38,6 +38,22 @@ export default function RepoHealthCheck({
 
   }, [setRepoCheck, owner, languageId, resourceId])
 
+  function generateMessage() {
+    let msg = '';
+    if ( !repoCheck ) return msg;
+
+    if ( repoCheck[0].repoFound ) {
+      msg = 'Repo OK';
+      if ( repoCheck[0].manifestFound ) {
+        if ( repoCheck[0].manifestValid ) msg += " and manifest OK.";
+        else msg += " but manifest is not valid.";
+      } else {
+        msg += " but manifest not found."
+      }
+    }
+    else msg = 'Repo not found';
+    return msg;
+  }
 
 
   return (
@@ -45,10 +61,10 @@ export default function RepoHealthCheck({
       <Typography align="center" variant="h6" gutterBottom>{title}</Typography>
       <Typography variant="body2">Org is {owner}</Typography>
       <Typography variant="body2">LangId is {languageId}</Typography>
-      <Typography variant="body2">server is {server}</Typography>
-      <Typography variant="body2">branch is {branch}</Typography>
       <Typography variant="body2">resourceId is {resourceId}</Typography>
-      <ReactJson src={repoCheck} />
+      <Typography variant="body2">
+        { generateMessage() }
+      </Typography>
       {
         repoCheck && !repoCheck[0].repoFound && 
         <div>
@@ -69,14 +85,16 @@ RepoHealthCheck.propTypes = {
 }
 
 /*
+      <ReactJson src={repoCheck} />
 
-      {
-        repoCheck && !repoCheck[0].repoFound && 
-          <div>
-            <CreateRepoButton />
-            <RenameRepoButton />
-          </div>
-      }
+        {
+          (repoCheck && repoCheck[0].repoFound && 'Repo OK') 
+          || 
+          (repoCheck && !repoCheck[0].repoFound && 'Repo does not exist')
+        }
 
-            <CreateRepoButton owner={owner} languageId={languageId} resourceId={resourceId} active={true} />
+
+              <Typography variant="body2">server is {server}</Typography>
+      <Typography variant="body2">branch is {branch}</Typography>
+
 */

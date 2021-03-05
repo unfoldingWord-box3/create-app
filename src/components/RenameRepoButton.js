@@ -88,7 +88,7 @@ function RenameRepoButton({ active, owner, languageId, resourceId }) {
     return (
         <div>
             <TextField
-                id='repo-rename-form'
+                id={resourceId}
                 type='text'
                 label='Repo to rename'
                 defaultValue={repoRename}
