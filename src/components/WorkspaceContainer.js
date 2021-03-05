@@ -50,7 +50,7 @@ function WorkspaceContainer() {
       <RepoHealthCheck title={res.scriptureResourceTypes["gst"]} server={server} branch={branch} owner={owner} languageId={languageId} resourceId="gst" />
 
       <RepoHealthCheck title={res.obsResourceTypes["obs"]} server={server} branch={branch} owner={owner} languageId={languageId} resourceId="obs" />
-      <RepoHealthCheck title={res.obsResourceTypes["obs_tq"]} server={server} branch={branch} owner={owner} languageId={languageId} resourceId="obs_tq" />
+      <RepoHealthCheck title={res.obsResourceTypes["obs_tn"]} server={server} branch={branch} owner={owner} languageId={languageId} resourceId="obs_tn" />
       <RepoHealthCheck title={res.obsResourceTypes["obs_sn"]} server={server} branch={branch} owner={owner} languageId={languageId} resourceId="obs_sn" />
       <RepoHealthCheck title={res.obsResourceTypes["obs_sq"]} server={server} branch={branch} owner={owner} languageId={languageId} resourceId="obs_sq" />
 
