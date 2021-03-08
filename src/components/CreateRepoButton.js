@@ -55,7 +55,7 @@ function CreateRepoButton({active, owner, languageId, resourceId }) {
         
         async function doSubmitCreate() {
         
-            const res = await fetch('https://qa.door43.org/api/v1/orgs/translate_test/repos?token=3a4b5caa338668855316a11f5356832b69bfb554', {
+            const res = await fetch('https://qa.door43.org/api/v1/orgs/translate_test/repos?token=3243c0e9575408bf634f87ce64a6e4d892fc4245', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: `{

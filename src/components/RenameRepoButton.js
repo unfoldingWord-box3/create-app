@@ -64,7 +64,7 @@ function RenameRepoButton({ active, owner, languageId, resourceId }) {
         let url = 'https://qa.door43.org/api/v1/repos/';
         url += owner + '/';
         url += repoRename;
-        url += '?token=3a4b5caa338668855316a11f5356832b69bfb554';
+        url += '?token=3243c0e9575408bf634f87ce64a6e4d892fc4245';
 
     
         const res = await fetch(url, {
