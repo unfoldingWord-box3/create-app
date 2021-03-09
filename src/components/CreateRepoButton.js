@@ -102,12 +102,12 @@ function CreateRepoButton({active, owner, languageId, resourceId }) {
         {showSuccess || showError ? (
             <Alert
               onDismiss={() => dismissAlert()}
-                severity={showSuccess ? 'success' : 'error'}
-                message={
-                showSuccess
-                    ? `Repo Created!`
-                    : errorMessage
-                }
+              severity={showSuccess ? 'success' : 'error'}
+              message={
+              showSuccess
+                  ? `Repo Created!`
+                  : errorMessage
+              }
             />
         ) : null}
       </div>

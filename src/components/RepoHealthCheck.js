@@ -1,10 +1,20 @@
 import PropTypes from 'prop-types'
 import {useState, useEffect} from 'react'
 import {Paper, Typography} from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
 
 import CreateRepoButton from './CreateRepoButton'
 import RenameRepoButton from './RenameRepoButton'
 import * as dcsApis from '../utils/dcsApis'
+
+const useStyles = makeStyles(theme => ({
+  paper: {
+    display: 'flex',
+    flexDirection: 'column',
+    margin: theme.spacing(4),
+  },
+}))
+
 
 export default function RepoHealthCheck({
   title,
@@ -14,6 +24,7 @@ export default function RepoHealthCheck({
 }) 
 {
   const [repoCheck, setRepoCheck] = useState(null);
+  const classes = useStyles();
 
   useEffect(() => {
     if ( owner.toLowerCase() === 'unfoldingword') {
@@ -54,7 +65,7 @@ export default function RepoHealthCheck({
 
 
   return (
-    <Paper>
+    <Paper className={classes.paper} >
       <Typography align="center" variant="h6" gutterBottom>{title}</Typography>
       <Typography variant="body2">Org is {owner}</Typography>
       <Typography variant="body2">LangId is {languageId}</Typography>

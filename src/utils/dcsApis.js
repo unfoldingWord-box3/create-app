@@ -4,9 +4,11 @@ import localforage from 'localforage';
 import { setup } from 'axios-cache-adapter';
 import JSZip from 'jszip';
 import _ from "lodash";
+import { base_url, apiPath } from '@common/constants'
 
-const baseURL = 'https://qa.door43.org/';
-const apiPath = 'api/v1';
+
+const baseURL = base_url;
+//const apiPath = 'api/v1';
 
 const repoDefaultMap = {
   // format is organization and then repoName
