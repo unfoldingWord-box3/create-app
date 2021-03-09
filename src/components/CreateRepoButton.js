@@ -3,7 +3,7 @@ import Path from 'path';
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import MuiAlert from '@material-ui/lab/Alert'
-import { base_url, apiPath, tokenid } from '@common/constants'
+import { base_url, apiPath } from '@common/constants'
 import { AuthContext } from '@context/AuthContext'
 
 
@@ -61,10 +61,9 @@ function CreateRepoButton({active, owner, languageId, resourceId }) {
         const rid = languageId + '_' + resourceId.toLowerCase();
         
         async function doSubmitCreate() {
-          console.log("auth=",authentication);
+          //console.log("auth=",authentication);
           const tokenid = authentication.token.sha1;
           const uri = Path.join(base_url,apiPath,'orgs',owner,'repos') ;
-          // '?token=3243c0e9575408bf634f87ce64a6e4d892fc4245'
           const res = await fetch(uri+'?token='+tokenid, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

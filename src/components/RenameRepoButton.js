@@ -1,13 +1,15 @@
-import {useState} from 'react'
+import {useState, useContext} from 'react'
+import Path from 'path'
+
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
-import { useRouter } from 'next/router'
+import { base_url, apiPath } from '@common/constants'
+import { AuthContext } from '@context/AuthContext'
 
 import MuiAlert from '@material-ui/lab/Alert'
 
 function Alert({ severity, message, onDismiss }) {
-  const router = useRouter()
 
   return (
     <MuiAlert
@@ -47,42 +49,41 @@ const useStyles = makeStyles(theme => ({
 }))
 
 function RenameRepoButton({ active, owner, languageId, resourceId }) {
-    const [repoRename, setRepoRename] = useState('');
-    const [submitRename, setSubmitRename] = useState(false)
-    const [showSuccess, setShowSuccess] = useState(false)
-    const [showError, setShowError] = useState(false)
-    const [errorMessage, setErrorMessage] = useState('')
-  
-    const classes = useStyles({ active })
+  const {authentication} = useContext(AuthContext)
 
-    function onRepoNameChange(e) {
-        setRepoRename(e.target.value)
-    }
+  const [repoRename, setRepoRename] = useState('');
+  const [submitRename, setSubmitRename] = useState(false)
+  const [showSuccess, setShowSuccess] = useState(false)
+  const [showError, setShowError] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
+
+  const classes = useStyles({ active })
+
+  function onRepoNameChange(e) {
+      setRepoRename(e.target.value)
+  }
 
     async function onSubmitRename() {
-        setSubmitRename(true)
+      setSubmitRename(true)
 
-        const rid = languageId + '_' + resourceId.toLowerCase();
+      const rid = languageId + '_' + resourceId.toLowerCase();
 
-        let url = 'https://qa.door43.org/api/v1/repos/';
-        url += owner + '/';
-        url += repoRename;
-        url += '?token=3243c0e9575408bf634f87ce64a6e4d892fc4245';
+      const tokenid = authentication.token.sha1;
+      const uri = Path.join(base_url,apiPath,'repos',owner,repoRename) ;
 
+      const res = await fetch(uri+'?token='+tokenid, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: `{ "name": "${rid}" }`
+        })
     
-        const res = await fetch(url, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: `{ "name": "${rid}" }`
-          })
-      
-          if (res.status === 200) {
-            setShowSuccess(true)
-          } else {
-              console.log('response:', res)
-              setErrorMessage('Error: '+res.status+' ('+res.statusText+')')
-              setShowError(true)
-          }
+        if (res.status === 200) {
+          setShowSuccess(true)
+        } else {
+            console.log('response:', res)
+            setErrorMessage('Error: '+res.status+' ('+res.statusText+')')
+            setShowError(true)
+        }
   
         setSubmitRename(false)
     }
