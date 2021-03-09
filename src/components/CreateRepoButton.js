@@ -1,7 +1,11 @@
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useContext} from 'react'
+import Path from 'path';
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import MuiAlert from '@material-ui/lab/Alert'
+import { base_url, apiPath, tokenid } from '@common/constants'
+import { AuthContext } from '@context/AuthContext'
+
 
 function Alert({ severity, message, onDismiss }) {
 
@@ -39,10 +43,12 @@ const useStyles = makeStyles(theme => ({
 
 
 function CreateRepoButton({active, owner, languageId, resourceId }) {
-    const [submitCreate, setSubmitCreate] = useState(false)
-    const [showSuccess, setShowSuccess] = useState(false)
-    const [showError, setShowError] = useState(false)
-    const [errorMessage, setErrorMessage] = useState('')
+  const {authentication} = useContext(AuthContext)
+
+  const [submitCreate, setSubmitCreate] = useState(false)
+  const [showSuccess, setShowSuccess] = useState(false)
+  const [showError, setShowError] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
    
     useEffect(() => {
         if ( !submitCreate ) return;
@@ -55,32 +61,35 @@ function CreateRepoButton({active, owner, languageId, resourceId }) {
         const rid = languageId + '_' + resourceId.toLowerCase();
         
         async function doSubmitCreate() {
+          console.log("auth=",authentication);
+          const tokenid = authentication.token.sha1;
+          const uri = Path.join(base_url,apiPath,'orgs',owner,'repos') ;
+          // '?token=3243c0e9575408bf634f87ce64a6e4d892fc4245'
+          const res = await fetch(uri+'?token='+tokenid, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: `{
+              "auto_init": true,
+              "default_branch": "master",
+              "description": "Init New Repo by Admin App",
+              "gitignores": "macOS",
+              "issue_labels": "",
+              "license": "CC-BY-SA-4.0.md",
+              "name": "${rid}",
+              "private": false,
+              "readme": "",
+              "template": true,
+              "trust_model": "default"
+            }`
+          })
         
-            const res = await fetch('https://qa.door43.org/api/v1/orgs/translate_test/repos?token=3243c0e9575408bf634f87ce64a6e4d892fc4245', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: `{
-                "auto_init": true,
-                "default_branch": "master",
-                "description": "Init New Repo by Admin App",
-                "gitignores": "macOS",
-                "issue_labels": "",
-                "license": "CC-BY-SA-4.0.md",
-                "name": "${rid}",
-                "private": false,
-                "readme": "",
-                "template": true,
-                "trust_model": "default"
-              }`
-            })
-        
-            if (res.status === 201) {
-              setShowSuccess(true)
-            } else {
-                console.log('response:', res)
-                setErrorMessage('Error: '+res.status+' ('+res.statusText+')')
-                setShowError(true)
-            }
+          if (res.status === 201) {
+            setShowSuccess(true)
+          } else {
+              console.log('response:', res)
+              setErrorMessage('Error: '+res.status+' ('+res.statusText+')')
+              setShowError(true)
+          }
         
         }
         

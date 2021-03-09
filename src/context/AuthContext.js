@@ -45,6 +45,11 @@ export default function AuthContextProvider(props) {
 
   const value = {
     logout,
+    config: {
+      server: base_url,
+      tokenid,
+    },
+    authentication,
   }
 
   return (
