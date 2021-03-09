@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import MuiAlert from '@material-ui/lab/Alert'
 
-function Alert({ severity, message }) {
+function Alert({ severity, message, onDismiss }) {
 
   return (
     <MuiAlert
@@ -13,7 +13,8 @@ function Alert({ severity, message }) {
       severity={severity}
       action={
         severity === 'success' && (
-          <Button color='inherit' size='small' onClick={() => router.push('/')}>
+          <Button color='inherit' size='small' 
+            onClick={() => onDismiss() }>
             OK
           </Button>
         )
@@ -87,25 +88,29 @@ function CreateRepoButton({active, owner, languageId, resourceId }) {
         setSubmitCreate(false);
       }, [submitCreate, owner, languageId, resourceId])
     
-    
+    function dismissAlert() {
+      setShowError(false);
+      setShowSuccess(false);
+    }
     
     const classes = useStyles({ active })
     return (
-        <div>
-            <Button className={classes.root} onClick={() => setSubmitCreate(true)} >
-                Create Repo
-            </Button>
-            {showSuccess || showError ? (
-                <Alert
-                    severity={showSuccess ? 'success' : 'error'}
-                    message={
-                    showSuccess
-                        ? `Repo Created!`
-                        : errorMessage
-                    }
-                />
-            ) : null}
-        </div>
+      <div>
+        <Button className={classes.root} onClick={() => setSubmitCreate(true)} >
+            Create Repo
+        </Button>
+        {showSuccess || showError ? (
+            <Alert
+              onDismiss={() => dismissAlert()}
+                severity={showSuccess ? 'success' : 'error'}
+                message={
+                showSuccess
+                    ? `Repo Created!`
+                    : errorMessage
+                }
+            />
+        ) : null}
+      </div>
   )
 }
 

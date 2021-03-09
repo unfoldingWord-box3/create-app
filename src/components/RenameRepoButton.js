@@ -2,10 +2,12 @@ import {useState} from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
+import { useRouter } from 'next/router'
 
 import MuiAlert from '@material-ui/lab/Alert'
 
-function Alert({ severity, message }) {
+function Alert({ severity, message, onDismiss }) {
+  const router = useRouter()
 
   return (
     <MuiAlert
@@ -15,7 +17,8 @@ function Alert({ severity, message }) {
       severity={severity}
       action={
         severity === 'success' && (
-          <Button color='inherit' size='small' onClick={() => router.push('/')}>
+          <Button color='inherit' size='small' 
+            onClick={() => onDismiss() }>
             OK
           </Button>
         )
@@ -84,7 +87,11 @@ function RenameRepoButton({ active, owner, languageId, resourceId }) {
         setSubmitRename(false)
     }
     
-    
+    function dismissAlert() {
+      setShowError(false);
+      setShowSuccess(false);
+    }
+
     return (
         <div>
             <TextField
@@ -112,12 +119,13 @@ function RenameRepoButton({ active, owner, languageId, resourceId }) {
                 </Button>
                 {showSuccess || showError ? (
                 <Alert
-                    severity={showSuccess ? 'success' : 'error'}
-                    message={
-                    showSuccess
-                        ? `Repo renamed!`
-                        : errorMessage
-                    }
+                  onDismiss={() => dismissAlert()}
+                  severity={showSuccess ? 'success' : 'error'}
+                  message={
+                  showSuccess
+                      ? `Repo renamed!`
+                      : errorMessage
+                  }
                 />
                 ) : null}
             </div>

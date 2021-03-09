@@ -1,17 +1,14 @@
 import PropTypes from 'prop-types'
 import {useState, useEffect} from 'react'
-import {Paper, Typography, Button} from '@material-ui/core'
+import {Paper, Typography} from '@material-ui/core'
 
-import ReactJson from 'react-json-view'
 import CreateRepoButton from './CreateRepoButton'
-import * as dcsApis from '../utils/dcsApis'
 import RenameRepoButton from './RenameRepoButton'
+import * as dcsApis from '../utils/dcsApis'
 
 export default function RepoHealthCheck({
   title,
   owner,
-  branch,
-  server,
   languageId,
   resourceId,
 }) 
@@ -78,23 +75,7 @@ export default function RepoHealthCheck({
 
 RepoHealthCheck.propTypes = {
   title: PropTypes.string.isRequired,
-  server: PropTypes.string.isRequired,
   owner: PropTypes.string.isRequired,
   languageId: PropTypes.string.isRequired,
   resourceId: PropTypes.string.isRequired,
 }
-
-/*
-      <ReactJson src={repoCheck} />
-
-        {
-          (repoCheck && repoCheck[0].repoFound && 'Repo OK') 
-          || 
-          (repoCheck && !repoCheck[0].repoFound && 'Repo does not exist')
-        }
-
-
-              <Typography variant="body2">server is {server}</Typography>
-      <Typography variant="body2">branch is {branch}</Typography>
-
-*/

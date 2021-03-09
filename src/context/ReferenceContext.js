@@ -11,24 +11,18 @@ export default function ReferenceContextProvider(props) {
     true,
   )
 
-  const [server, setServer] = useState('https://git.door43.org')
-  const [branch, setBranch] = useState('master')
   const [currentLayout, setCurrentLayout] = useLocalStorage('resourceLayout', null)
 
   const value = {
     state: {
       showAccountSetup,
       languageId,
-      server,
-      branch,
       owner,
       currentLayout,
     },
     actions: {
       setShowAccountSetup,
       setLanguageId,
-      setBranch,
-      setServer,
       setOwner,
       setCurrentLayout,
     },

@@ -8,6 +8,8 @@ import MenuItem from '@material-ui/core/MenuItem'
 import Select from '@material-ui/core/Select'
 import { getGatewayLanguages } from '@common/languages'
 import { ReferenceContext } from '@context/ReferenceContext'
+import { base_url, apiPath } from '@common/constants'
+
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -31,8 +33,10 @@ export default function TranslationSettings({ authentication }) {
   } = useContext(ReferenceContext)
 
   useEffect(() => {
+    console.log("authentication.config:", authentication.config)
+    const uri = base_url+'/'+apiPath+'/user/orgs';
     async function getOrgs() {
-      const orgs = await fetch('https://git.door43.org/api/v1/user/orgs', {
+      const orgs = await fetch(uri, {
         ...authentication.config,
       })
         .then(response => response.json())
@@ -109,4 +113,4 @@ export default function TranslationSettings({ authentication }) {
   )
 }
 
-TranslationSettings.propTypes = { authentication: PropTypes.object.isRequired }
+TranslationSettings.propTypes = { authentication: PropTypes.object }
