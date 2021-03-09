@@ -7,7 +7,7 @@ import _ from "lodash";
 import { base_url, apiPath } from '@common/constants'
 
 
-const baseURL = base_url;
+const baseURL = base_url+'/';
 //const apiPath = 'api/v1';
 
 const repoDefaultMap = {
