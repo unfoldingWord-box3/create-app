@@ -7,8 +7,58 @@ import _ from "lodash";
 import { base_url, apiPath } from '@common/constants'
 
 
+
 const baseURL = base_url+'/';
-//const apiPath = 'api/v1';
+
+export async function repoExists(username, repository, tokenid) {
+
+  // example: https://qa.door43.org/api/v1/repos/translate_test/en_tn 
+  const uri = Path.join(base_url,apiPath,'repos',username,repository) ;
+  const res = await fetch(uri+'?token='+tokenid, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  })
+  let repoExistsFlag = false;
+  if (res.status === 200) {
+    // success
+    repoExistsFlag = true;
+  } 
+  return repoExistsFlag;
+}
+
+export async function manifestExists(username, repository, tokenid) {
+
+  // example: https://qa.door43.org/api/v1/repos/translate_test/en_ta/raw/manifest.yaml
+  //          https://qa.door43.org/translate_test/en_ta/raw/branch/master/manifest.yaml
+  const uri = Path.join(username,repository,'raw','branch/master/manifest.yaml');
+  let manifestInfo = {status: false, valid: false, format: 'UNKNOWN'}
+  try {
+    const { data } = await Door43Api.get(uri+'?token='+tokenid, {});
+ 
+    if ( data ) {
+      // success
+      manifestInfo.status = true;
+      const manifestContents = data;
+      try {
+        let manifestJson = yaml.parse(manifestContents);
+        manifestInfo.valid = true;
+        console.log("manifestJson:", manifestJson)
+        if ( manifestJson.dublin_core.format ) manifestInfo.format = manifestJson.dublin_core.format;
+      }
+      catch (yamlError) {
+        console.error(`${username} ${repository} manifest yaml parse error: ${yamlError.message}`);
+      }
+    } 
+  } catch (geterror) {
+    //console.error("Error:",geterror,"on:",uri);
+  }
+  return manifestInfo;
+}
+
+
+
+
+
 
 const repoDefaultMap = {
   // format is organization and then repoName

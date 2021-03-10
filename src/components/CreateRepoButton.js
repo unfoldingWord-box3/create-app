@@ -42,7 +42,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-function CreateRepoButton({active, owner, languageId, resourceId }) {
+function CreateRepoButton({active, owner, languageId, resourceId, refresh }) {
   const {authentication} = useContext(AuthContext)
 
   const [submitCreate, setSubmitCreate] = useState(false)
@@ -99,6 +99,7 @@ function CreateRepoButton({active, owner, languageId, resourceId }) {
     function dismissAlert() {
       setShowError(false);
       setShowSuccess(false);
+      refresh(true);
     }
     
     const classes = useStyles({ active })
